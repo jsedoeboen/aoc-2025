@@ -22,8 +22,22 @@ var answer = 0L
     println(s"From: $from, To: $to")
 
     for value <- from to to do
-      val (left, right) = value.toString.splitAt(value.toString.length / 2)
-      if(left == right) {
+      val chars = value.toString.toCharArray
+      var hasRepeating = false
+
+      for groupSize <- 1L to (chars.length /2) do {
+      val isRepeating = chars.grouped(groupSize.toInt)
+        .sliding(2)
+        .forall {
+          case Seq(a, b) => a.mkString == b.mkString
+          case other => false
+        }
+
+        if (isRepeating && !hasRepeating) hasRepeating = true
+      }
+
+
+      if(hasRepeating) {
         println(value)
         answer += value
       }
